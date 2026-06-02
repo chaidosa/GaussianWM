@@ -26,8 +26,13 @@ from gaussianwm.processor.rlds.utils.data_utils import (
     tree_map,
 )
 
-# Configure Tensorflow with *no GPU devices* (to prevent clobber with PyTorch)
-tf.config.set_visible_devices([], "GPU")
+# Configure Tensorflow with *no GPU devices* (to prevent clobber with PyTorch).
+# If TensorFlow has already initialized, this call raises and the notebook should
+# keep going rather than fail at import time.
+try:
+    tf.config.set_visible_devices([], "GPU")
+except RuntimeError:
+    pass
 
 
 # ruff: noqa: B006

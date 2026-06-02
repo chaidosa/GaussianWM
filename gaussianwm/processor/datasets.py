@@ -19,8 +19,13 @@ from gaussianwm.processor.rlds.oxe import OXE_NAMED_MIXTURES, get_oxe_dataset_kw
 from gaussianwm.processor.rlds.utils.data_utils import NormalizationType
 from gaussianwm.processor.rlds.dataset import make_dataset_from_rlds
 
-# Configure Tensorflow with *no GPU devices* (to prevent clobber with PyTorch)
-tf.config.set_visible_devices([], "GPU")
+# Configure Tensorflow with *no GPU devices* (to prevent clobber with PyTorch).
+# If TensorFlow has already initialized, this call raises and the caller may
+# already be using TF, so keep importing instead of failing.
+try:
+    tf.config.set_visible_devices([], "GPU")
+except RuntimeError:
+    pass
 
 
 def euler_to_rmat(euler):
