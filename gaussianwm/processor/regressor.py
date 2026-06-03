@@ -158,8 +158,9 @@ class MAST3RGaussians(nn.Module):
         # if device is None:
         #     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         device = torch.device('cpu')
+        pretrained_model_name_or_path = Path(pretrained_model_name_or_path)
             
-        if os.path.isfile(pretrained_model_name_or_path):
+        if pretrained_model_name_or_path.is_file():
             # Load the checkpoint
             checkpoint = torch.load(pretrained_model_name_or_path, map_location=device)
             
@@ -196,7 +197,7 @@ class MAST3RGaussians(nn.Module):
             model.eval()
             return model
         else:
-            raise NotImplementedError(f"Not implemented for {pretrained_model_name_or_path}")
+            raise FileNotFoundError(f"Splatt3r checkpoint not found: {pretrained_model_name_or_path}")
 
     def forward(self, view1, view2):
 
