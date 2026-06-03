@@ -114,6 +114,7 @@ class DroidDataset(IterableDataset):
     def __init__(
         self,
         data_path: str,
+        rlds_name: str = "droid_100",
         segment_length: int = 12,
         context_length: int = 2,
         action_dim: int = 10,
@@ -156,6 +157,7 @@ class DroidDataset(IterableDataset):
         """
             
         self.data_path = data_path
+        self.rlds_name = rlds_name
         self.segment_length = segment_length
         self.context_length = context_length
         self.action_dim = action_dim
@@ -188,8 +190,7 @@ class DroidDataset(IterableDataset):
         ]
 
         dataset_kwargs_list = [{
-            # "name": "droid",
-            "name": "droid_100",
+            "name": rlds_name,
             # "name": "berkeley_cable_routing",
             # "filter_functions": filter_functions,
             **BASE_DATASET_KWARGS
@@ -380,6 +381,7 @@ def build_gaussian_splatting_reconstruction_dataset(split, cfg):
     if cfg.dataset_name == 'droid':
         return DroidDataset(
             data_path=cfg.data_path,
+            rlds_name=cfg.get("rlds_name", "droid_100"),
             segment_length=cfg.segment_length,
             context_length=cfg.context_length,
             action_dim=cfg.action_dim,

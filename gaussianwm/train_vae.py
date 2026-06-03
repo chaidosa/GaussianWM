@@ -39,7 +39,7 @@ def train_one_epoch(model, criterion, data_loader, optimizer, device, epoch, los
 
     splatt3r = Splatt3rRegressor().to(device)
     accum_iter = cfg.train.accum_iter
-    kl_weight = 1e-3
+    kl_weight = cfg.train.get("kl_weight", 1e-3)
 
     optimizer.zero_grad()
 
@@ -291,7 +291,8 @@ def main(cfg: DictConfig):
             cfg=cfg
         )
 
-        if cfg.output_dir and (epoch % 10 == 0 or epoch + 1 == cfg.train.epochs):
+        save_every = cfg.train.get("save_every", 10)
+        if cfg.output_dir and (epoch % save_every == 0 or epoch + 1 == cfg.train.epochs):
             distributed_utils.save_model(
                 args=cfg, model=model, model_without_ddp=model_without_ddp, optimizer=optimizer,
                 loss_scaler=loss_scaler, epoch=epoch)
